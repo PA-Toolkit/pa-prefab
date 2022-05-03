@@ -6,7 +6,9 @@
   </a>
 </p>
 
-> Reads and generates Project Arrhythmia prefabs procedurally.
+> Reads and generates Project Arrhythmia prefabs procedurally
+
+GitHub repository: https://github.com/Reimnop/pa-prefab
 
 ## Install
 
