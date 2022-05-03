@@ -11,14 +11,16 @@
 ## Install
 
 ```sh
-npm install
+npm install pa-prefab
+```
+
+## Build
+
+```sh
+npm run build
 ```
 
 ## Usage
-
-```sh
-npm install pa-prefab
-```
 ## Creating a prefab
 It is recommended to use the `CreatePrefab(string, PrefabType)` function to create a new prefab.
 ```js
