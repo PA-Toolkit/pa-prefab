@@ -4,7 +4,7 @@ import {Serializable} from "./Serializable";
 /**
  * A class that holds keyframes.
  */
-export class KeyframeList<T extends KeyframeValue> implements Serializable {
+export default class KeyframeList<T extends KeyframeValue> implements Serializable {
     /**
      * The keyframes stored in this object.
      */
