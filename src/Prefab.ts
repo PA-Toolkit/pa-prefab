@@ -1,6 +1,6 @@
 import {PrefabType} from "./Enums";
 import PrefabObject from "./PrefabObject";
-import {randId} from "./Utils";
+import {RandId} from "./Utils";
 import {Serializable} from "./Serializable";
 
 /**
@@ -67,7 +67,7 @@ export default class Prefab implements Serializable {
      * @param name A new prefab object
      */
     createObject(name: string): PrefabObject {
-        let id: string = randId();
+        let id: string = RandId();
         let obj: PrefabObject = new PrefabObject({
             name: name,
             id: id

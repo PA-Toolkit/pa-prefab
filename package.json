@@ -4,7 +4,9 @@
   "description": "Reads and generates Project Arrhythmia prefabs procedurally.",
   "main": "build/pa-prefab.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "node test/test.js",
+    "pretest": "npm run build"
   },
   "author": "Reimnop",
   "license": "MIT",

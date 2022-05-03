@@ -198,7 +198,7 @@ export default class PrefabObject implements Serializable {
         json.name = this.name;
         json.id = this.id;
         json.p = this.parentId;
-        json.pt = this.positionParenting ? "1" : "0" + this.scaleParenting ? "1" : "0" + this.rotationParenting ? "1" : "0";
+        json.pt = (this.positionParenting ? "1" : "0") + (this.scaleParenting ? "1" : "0") + (this.rotationParenting ? "1" : "0");
         json.po = [
             this.positionParentOffset.toString(),
             this.scaleParentOffset.toString(),
@@ -214,19 +214,22 @@ export default class PrefabObject implements Serializable {
         json.st = this.startTime.toString();
         json.akt = this.autoKillType.toString();
         json.ako = this.autoKillOffset.toString();
+
         json.o = {};
         json.o.x = this.originX.toString();
         json.o.y = this.originY.toString();
+
         json.ed = {};
         json.ed.locked = this.editorLocked ? "true" : "false";
         json.ed.shrink = this.editorCollapse ? "true" : "false";
         json.ed.bin = this.editorBin.toString();
         json.ed.layer = this.editorLayer.toString();
+
         json.events = {};
         json.events.pos = this.positionKeyframes.toJson();
         json.events.sca = this.scaleKeyframes.toJson();
         json.events.rot = this.rotationKeyframes.toJson();
-        json.events.col = this.scaleKeyframes.toJson();
+        json.events.col = this.colorKeyframes.toJson();
         return json;
     }
 

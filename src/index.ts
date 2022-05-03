@@ -4,5 +4,5 @@ import KeyframeList from "./KeyframeList";
 
 export * from "./Enums"
 export * from "./Keyframe"
-export * from "./KeyframeHelper"
+export * from "./Utils"
 export { Prefab, PrefabObject, KeyframeList };
