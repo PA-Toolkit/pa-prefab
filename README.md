@@ -24,14 +24,14 @@ npm run build
 ## Creating a prefab
 It is recommended to use the `CreatePrefab(string, PrefabType)` function to create a new prefab.
 ```js
-const { Prefab } = require("pa-prefab");
+const { Prefab, PrefabType } = require("pa-prefab");
 
 let myPrefab = CreatePrefab("Hello Prefab Toolkit!", PrefabType.Misc1);
 ```
 ## Creating an object
 To create an object, call `prefab.createObject(string);`. This returns an object which can be modified.
 ```js
-const { Prefab } = require("pa-prefab");
+const { Prefab, PrefabType } = require("pa-prefab");
 
 let myPrefab = CreatePrefab("Hello Prefab Toolkit!", PrefabType.Misc1);
 let myObject = myPrefab.createObject("Hello Prefab Object!");
@@ -115,6 +115,16 @@ You can convert the prefab to a JSON string to write it to a file.
 const { fs } = require("fs");
 
 fs.writeFileSync("my_new_prefab.lsp", prefab.toString());
+```
+## Reading an existing prefab
+You can read an existing prefab from a string.
+```js
+const { fs } = require("fs");
+const { CreatePrefabFromJson } = require("pa-prefab");
+
+let jsonStr = fs.readFileSync("my_prefab.lsp");
+let json = JSON.parse(jsonStr);
+let prefab = CreatePrefabFromJson(json);
 ```
 
 ## Run tests
