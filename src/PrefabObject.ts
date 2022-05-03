@@ -1,6 +1,6 @@
 import {PrefabObjectAutoKillType, PrefabObjectShape, PrefabObjectType, PrefabSquareOption} from "./Enums";
 import Prefab from "./Prefab";
-import {KeyframeList} from "./KeyframeList";
+import KeyframeList from "./KeyframeList";
 import {ColorValue, PositionValue, RotationValue, ScaleValue} from "./Keyframe";
 import {Serializable} from "./Serializable";
 
