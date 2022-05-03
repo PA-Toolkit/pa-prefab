@@ -1,12 +1,20 @@
-const {PositionValue, PositionKeyframe, PrefabObjectRandomMode, PrefabObjectEasing} = require("../build/pa-prefab");
+const {
+    PositionKeyframe,
+    Prefab,
+    PrefabType,
+    ScaleKeyframe,
+    RotationKeyframe, ColorKeyframe
+} = require("../build/pa-prefab");
 
-let rPos = new PositionValue();
-rPos.x = 12.9;
-rPos.y = -4.1;
+let prefab = new Prefab({
+    name: "Hello",
+    type: PrefabType.Bombs
+});
 
-let kf = PositionKeyframe(0.0, -2.4, 8.2);
-kf.randomMode = PrefabObjectRandomMode.Snap;
-kf.randomValue = rPos;
-kf.easing = PrefabObjectEasing.InExpo;
+let object = prefab.createObject("Hello world!");
+object.positionKeyframes.push(PositionKeyframe(0.0, 1.0, 2.5));
+object.scaleKeyframes.push(ScaleKeyframe(0.0, 1.0, 1.0));
+object.rotationKeyframes.push(RotationKeyframe(0.0, 90.0));
+object.colorKeyframes.push(ColorKeyframe(0.0, 1));
 
-console.log(kf.toJson());
+console.log(prefab.toString());

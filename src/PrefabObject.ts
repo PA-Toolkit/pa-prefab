@@ -1,10 +1,13 @@
+import {PrefabObjectAutoKillType, PrefabObjectShape, PrefabObjectType, PrefabSquareOption} from "./Enums";
+import Prefab from "./Prefab";
+import {KeyframeList} from "./KeyframeList";
+import {ColorValue, PositionValue, RotationValue, ScaleValue} from "./Keyframe";
+import {Serializable} from "./Serializable";
+
 /**
  * The prefab object. This will end up as an actual object in the Project Arrhythmia Editor.
  */
-import {PrefabObjectAutoKillType, PrefabObjectShape, PrefabObjectType, PrefabSquareOption} from "./Enums";
-import Prefab from "./Prefab";
-
-export default class PrefabObject {
+export default class PrefabObject implements Serializable {
     /**
      * The object's name.
      */
@@ -86,7 +89,10 @@ export default class PrefabObject {
     editorBin: number = 0;
     editorLayer: number = 0;
 
-    // TODO: add keyframe lists.
+    readonly positionKeyframes: KeyframeList<PositionValue> = new KeyframeList<PositionValue>(() => new PositionValue(), []);
+    readonly scaleKeyframes: KeyframeList<ScaleValue> = new KeyframeList<ScaleValue>(() => new ScaleValue(), []);
+    readonly rotationKeyframes: KeyframeList<RotationValue> = new KeyframeList<RotationValue>(() => new RotationValue(), []);
+    readonly colorKeyframes: KeyframeList<ColorValue> = new KeyframeList<ColorValue>(() => new ColorValue(), []);
 
     readonly prefab: Prefab;
 
@@ -167,7 +173,61 @@ export default class PrefabObject {
             }
         }
 
-        // TODO: implement parsing events
+        if (json.events !== undefined) {
+            if (json.events.pos !== undefined) {
+                this.positionKeyframes = new KeyframeList<PositionValue>(() => new PositionValue(), json.events.pos);
+            }
+            if (json.events.sca !== undefined) {
+                this.scaleKeyframes = new KeyframeList<ScaleValue>(() => new ScaleValue(), json.events.sca);
+            }
+            if (json.events.rot !== undefined) {
+                this.rotationKeyframes = new KeyframeList<RotationValue>(() => new RotationValue(), json.events.rot);
+            }
+            if (json.events.col !== undefined) {
+                this.colorKeyframes = new KeyframeList<ColorValue>(() => new ColorValue(), json.events.col);
+            }
+        }
+    }
+
+    toString(): string {
+        return JSON.stringify(this.toJson());
+    }
+
+    toJson(): any {
+        let json: any = {};
+        json.name = this.name;
+        json.id = this.id;
+        json.p = this.parentId;
+        json.pt = this.positionParenting ? "1" : "0" + this.scaleParenting ? "1" : "0" + this.rotationParenting ? "1" : "0";
+        json.po = [
+            this.positionParentOffset.toString(),
+            this.scaleParentOffset.toString(),
+            this.rotationParentOffset.toString()
+        ];
+        json.d = this.renderDepth.toString();
+        json.ot = this.objectType.toString();
+        json.shape = this.shape.toString();
+        json.so = this.shapeOption.toString();
+        if (this.text !== "") {
+            json.text = this.text;
+        }
+        json.st = this.startTime.toString();
+        json.akt = this.autoKillType.toString();
+        json.ako = this.autoKillOffset.toString();
+        json.o = {};
+        json.o.x = this.originX.toString();
+        json.o.y = this.originY.toString();
+        json.ed = {};
+        json.ed.locked = this.editorLocked ? "true" : "false";
+        json.ed.shrink = this.editorCollapse ? "true" : "false";
+        json.ed.bin = this.editorBin.toString();
+        json.ed.layer = this.editorLayer.toString();
+        json.events = {};
+        json.events.pos = this.positionKeyframes.toJson();
+        json.events.sca = this.scaleKeyframes.toJson();
+        json.events.rot = this.rotationKeyframes.toJson();
+        json.events.col = this.scaleKeyframes.toJson();
+        return json;
     }
 
     /**

@@ -146,13 +146,3 @@ export enum PrefabObjectEasing {
     OutExpo = "OutExpo",
     InOutExpo = "InOutExpo"
 }
-
-/**
- * Prefab Build Flags enum. Used for setting certain configurations to the prefab builder.
- */
-export enum PrefabBuildFlags {
-    None             = 0b00000000,
-    SortObjects      = 0b00000001,
-    SortKeyframes    = 0b00000010,
-    AbsoluteRotation = 0b00000100
-}

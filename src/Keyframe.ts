@@ -90,11 +90,11 @@ export class ColorValue implements KeyframeValue {
     }
 
     readRandomJson(json) {
-        throw Error("Color keyframe can not be randomized!");
+        throw new Error("Color keyframe can not be randomized!");
     }
 
     writeRandomJson(json) {
-        throw Error("Color keyframe can not be randomized!");
+        throw new Error("Color keyframe can not be randomized!");
     }
 }
 
@@ -124,6 +124,10 @@ export class Keyframe<T extends KeyframeValue> implements Serializable {
             this.randomValue.readRandomJson(json);
             this.randomInterval = Number.parseFloat(json.rz);
         }
+    }
+
+    toString(): string {
+        return JSON.stringify(this.toJson());
     }
 
     toJson(): any {

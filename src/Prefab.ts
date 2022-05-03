@@ -1,11 +1,12 @@
 import {PrefabType} from "./Enums";
 import PrefabObject from "./PrefabObject";
 import {randId} from "./Utils";
+import {Serializable} from "./Serializable";
 
 /**
- * The prefab, the base of the library. Use this to make a prefab and export to a file or to a stream.
+ * The prefab, the base of the library.
  */
-export default class Prefab {
+export default class Prefab implements Serializable {
     /**
      * The prefab's name. This will be visible in the Project Arrhythmia Editor.
      */
@@ -17,7 +18,7 @@ export default class Prefab {
     type: PrefabType;
 
     /**
-     * The prefab's offset. I don't even know what this does but I'll put it here anyway.
+     * The prefab's offset. I don't even know what this does but I'll put it here anyway. fuck me
      */
     offset: number;
 
@@ -43,6 +44,22 @@ export default class Prefab {
                 }
             }
         }
+    }
+
+    toString(): string {
+        return JSON.stringify(this.toJson());
+    }
+
+    toJson(): any {
+        let json: any = {};
+        json.name = this.name;
+        json.type = this.type.toString();
+        json.offset = this.offset.toString();
+        json.objects = [];
+        for (let [, object] of Object.entries(this.objects)) {
+            json.objects.push(object.toJson());
+        }
+        return json;
     }
 
     /**
