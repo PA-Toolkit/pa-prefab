@@ -135,13 +135,6 @@ let prefab = CreatePrefabFromJson(json);
 npm run test
 ```
 
-## Author
-
-👤 **Reimnop**
-
-* Website: reimnop.me
-* Github: [@Reimnop](https://github.com/Reimnop)
-
 ## Show your support
 
 Give a ⭐️ if this project helped you!
