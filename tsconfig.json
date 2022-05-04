@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
-    "declaration": true
+    "declaration": true,
+	"declarationDir": "build/types",
+	"lib": [ "es2017" ]
   }
 }

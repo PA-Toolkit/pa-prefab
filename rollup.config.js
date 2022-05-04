@@ -1,16 +1,15 @@
-import ts from "rollup-plugin-ts";
+import typescript from "@rollup/plugin-typescript";
 import pkg from "./package.json";
 
 export default [
     {
         input: "src/index.ts",
         output: {
-            name: "pa-prefab",
-            file: pkg.main,
-            format: "umd"
+            dir: "build",
+			format: "cjs"
         },
         plugins: [
-            ts()
+            typescript()
         ]
     }
 ];

@@ -1,8 +1,7 @@
 {
   "name": "pa-prefab",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Reads and generates Project Arrhythmia prefabs procedurally",
-  "main": "build/pa-prefab.js",
   "scripts": {
     "build": "rollup -c",
     "test": "node test/test.js",
@@ -10,8 +9,11 @@
   },
   "author": "Reimnop",
   "license": "MIT",
+  "files": [
+    "build/**/*"
+  ],
   "devDependencies": {
-    "rollup": "^2.71.1",
-    "rollup-plugin-ts": "^2.0.7"
+    "@rollup/plugin-typescript": "^8.3.2",
+    "rollup": "^2.71.1"
   }
 }
