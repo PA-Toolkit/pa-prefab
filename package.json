@@ -2,6 +2,7 @@
   "name": "pa-prefab",
   "version": "1.0.4",
   "description": "Reads and generates Project Arrhythmia prefabs procedurally",
+  "main": "build/index.js",
   "scripts": {
     "build": "rollup -c",
     "test": "node test/test.js",

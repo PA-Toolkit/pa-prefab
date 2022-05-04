@@ -12,7 +12,7 @@ const {
     CreateColorKeyframe,
     PrefabObjectShape,
     CreatePrefabFromJson
-} = require("../build/index");
+} = require("..");
 const fs = require("fs");
 
 // Create new prefab
