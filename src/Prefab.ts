@@ -1,49 +1,43 @@
-import {PrefabType} from "./Enums";
-import PrefabObject from "./PrefabObject";
-import {RandId} from "./Utils";
-import {Serializable} from "./Serializable";
+import {PrefabType} from "./PrefabType";
+import {ObjectOwner, PAObject, Serializable, Utils} from "pa-common";
 
 /**
  * The prefab, the base of the library.
  */
-export default class Prefab implements Serializable {
+export default class Prefab implements ObjectOwner, Serializable {
     /**
      * The prefab's name. This will be visible in the Project Arrhythmia Editor.
      */
-    name: string;
+    name: string = "";
 
     /**
      * The prefab's type. This will be visible the in the Project Arrhythmia Editor.
      */
-    type: PrefabType;
+    type: PrefabType = PrefabType.Bombs;
 
     /**
      * The prefab's offset. I don't even know what this does but I'll put it here anyway. fuck me
      */
-    offset: number;
+    offset: number = 0.0;
 
-    readonly objects: Map<string, PrefabObject> = new Map<string, PrefabObject>();
+    readonly objects: Map<string, PAObject> = new Map<string, PAObject>();
 
     /**
      * Prefab constructor.
-     * @param json The prefab json. Offset and objects can be omitted.
+     * @param name Name of the prefab
+     * @param type Type of the prefab
      */
-    constructor(json) {
-        this.name = json.name;
-        this.type = Number.parseInt(json.type);
-        this.offset = json.offset !== undefined ? Number.parseFloat(json.offset) : 0.0;
+    constructor(name: string, type: PrefabType) {
+        this.name = name;
+        this.type = type;
+    }
 
-        if (json.objects !== undefined) {
-            for (let objJson of json.objects) {
-                this.objects[objJson.id] = new PrefabObject(objJson, this);
-            }
-            for (let [, obj] of Object.entries(this.objects)) {
-                let parent: PrefabObject = obj.getParent();
-                if (parent != null) {
-                    parent.childrenIds.add(obj.id);
-                }
-            }
-        }
+    getId(): string {
+        return Utils.randId();
+    }
+
+    getObject(id: string): PAObject {
+        return this.objects[id];
     }
 
     toString(): string {
@@ -62,31 +56,38 @@ export default class Prefab implements Serializable {
         return json;
     }
 
-    /**
-     * Creates an object and stores it the prefab.
-     * @param name A new prefab object
-     */
-    createObject(name: string): PrefabObject {
-        let id: string = RandId();
-        let obj: PrefabObject = new PrefabObject({
-            name: name,
-            id: id
-        }, this);
-        this.objects[id] = obj;
-        return obj;
+    fromJson(json: any): any {
+        this.name = json.name;
+        this.type = Number.parseInt(json.type);
+        this.offset = json.offset !== undefined ? Number.parseFloat(json.offset) : 0.0;
+
+        if (json.objects !== undefined) {
+            for (let objJson of json.objects) {
+                let object: PAObject = new PAObject("", this);
+                object.fromJson(objJson);
+                this.objects[objJson.id] = object;
+            }
+        }
     }
 
     /**
-     * Unparents all object's children and deletes the object.
-     * @param object An existing object
+     * Adds an object to this prefab.
      */
-    deleteObject(object: PrefabObject) {
-        if (object.prefab != this) {
-            throw Error("Specified object does not belong to this prefab!");
+    addObject(object: PAObject) {
+        if (object.owner !== this) {
+            throw new Error("Mismatch owner!");
         }
-        for (let child of object.getChildren()) {
-            child.setParent(null);
+        if (this.objects.has(object.id)) {
+            throw new Error("This object is already added to the prefab!");
         }
-        this.objects.delete(object.id);
+        this.objects[object.id] = object;
+    }
+
+    /**
+     * Remove an object from this prefab.
+     * @param id The object's id
+     */
+    removeObject(id: string) {
+        this.objects.delete(id);
     }
 }

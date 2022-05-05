@@ -2,46 +2,43 @@
 Procedural bomb generator test.
  */
 
-const {
-    CreatePrefab,
-    PrefabType,
-    PrefabObjectType,
-    CreatePositionKeyframe,
-    CreateScaleKeyframe,
-    CreateRotationKeyframe,
-    CreateColorKeyframe,
-    PrefabObjectShape,
-    CreatePrefabFromJson
-} = require("..");
+const {Prefab, PrefabType} = require("..");
+const {PAObject, ObjectType, Shape} = require("pa-common");
+
 const fs = require("fs");
 
 // Create new prefab
-let prefab = CreatePrefab("Procedural Bomb", PrefabType.Bombs);
+let prefab = new Prefab("Procedural Bomb", PrefabType.Bombs);
 
 // Base object for all the bullets
-let parent = prefab.createObject("Base");
-parent.objectType = PrefabObjectType.Empty;
+let parent = new PAObject("Base", prefab);
+prefab.addObject(parent);
+
+parent.objectType = ObjectType.Empty;
 
 // Add default keyframes
-parent.positionKeyframes.push(CreatePositionKeyframe(0.0, 0.0, 0.0));
-parent.scaleKeyframes.push(CreateScaleKeyframe(0.0, 1.0, 1.0));
-parent.rotationKeyframes.push(CreateRotationKeyframe(0.0, 0.0));
-parent.colorKeyframes.push(CreateColorKeyframe(0.0, 0));
+parent.pushPosition(0.0, 0.0, 0.0);
+parent.pushScale(0.0, 1.0, 1.0);
+parent.pushRotation(0.0, 0.0);
+parent.pushColor(0.0, 0);
 
 // Create bullets
 for (let i = 0; i < 32; i++) {
     let dirX = Math.cos(i / 16.0 * Math.PI);
     let dirY = Math.sin(i / 16.0 * Math.PI);
-    let bullet = prefab.createObject(`Bullet ${i}`);
-    bullet.editorBin = 1;
-    bullet.shape = PrefabObjectShape.Circle;
-    bullet.setParent(parent);
 
-    bullet.positionKeyframes.push(CreatePositionKeyframe(0.0, 0.0, 0.0));
-    bullet.positionKeyframes.push(CreatePositionKeyframe(10.0, dirX * 60.0, dirY * 60.0));
-    bullet.scaleKeyframes.push(CreateScaleKeyframe(0.0, 1.0, 1.0));
-    bullet.rotationKeyframes.push(CreateRotationKeyframe(0.0, 0.0));
-    bullet.colorKeyframes.push(CreateColorKeyframe(0.0, 0));
+    let bullet = new PAObject(`Bullet ${i}`, prefab);
+    prefab.addObject(bullet);
+
+    bullet.editorBin = 1;
+    bullet.shape = Shape.Circle;
+    bullet.parent = parent;
+
+    bullet.pushPosition(0.0, 0.0, 0.0);
+    bullet.pushPosition(10.0, dirX * 60.0, dirY * 60.0);
+    bullet.pushScale(0.0, 1.0, 1.0);
+    bullet.pushRotation(0.0, 0.0);
+    bullet.pushColor(0.0, 0);
 }
 
 if (!fs.existsSync("test/result")) {
@@ -52,5 +49,11 @@ fs.writeFileSync("test/result/procedural_bomb.lsp", prefab.toString(), { flag: '
 // Read test
 let jsonStr = fs.readFileSync("test/result/procedural_bomb.lsp").toString();
 
-let readPrefab = CreatePrefabFromJson(JSON.parse(jsonStr));
-console.log(readPrefab.toString() === jsonStr ? "Test passed!" : "Test failed!");
+let readPrefab = new Prefab("", PrefabType.Bombs);
+readPrefab.fromJson(JSON.parse(jsonStr));
+
+console.log("original json >\n" + prefab.toString());
+console.log("");
+console.log("Read back json >\n" + readPrefab.toString());
+
+console.assert(readPrefab.toString() === jsonStr);

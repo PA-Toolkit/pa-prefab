@@ -6,7 +6,10 @@ export default [
         output: {
             dir: "build",
 			format: "umd",
-			name: "PAPrefab"
+			name: "PAPrefab",
+            globals: {
+                "pa-common": "PACommon"
+            }
         },
         plugins: [
             typescript()

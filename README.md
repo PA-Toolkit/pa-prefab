@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to pa-prefab 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-2.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
@@ -23,20 +23,44 @@ npm run build
 ```
 
 ## Usage
+## Importing
+### Node.js
+```js
+const { Prefab, PrefabType } = require("pa-prefab");
+```
+or
+```js
+import { Prefab, PrefabType } from "pa-prefab";
+```
+
+### Browser
+```html
+<head>
+    <script type="text/javascript" src="path/to/pa-prefab.js"/>
+</head>
+
+<script>
+    const Prefab = PAPrefab.Prefab;
+    const PrefabType = PAPrefab.PrefabType;
+</script>
+```
+
 ## Creating a prefab
 It is recommended to use the `CreatePrefab(string, PrefabType)` function to create a new prefab.
 ```js
 const { Prefab, PrefabType } = require("pa-prefab");
 
-let myPrefab = CreatePrefab("Hello Prefab Toolkit!", PrefabType.Misc1);
+let myPrefab = new Prefab("Hello Prefab Toolkit!", PrefabType.Misc1);
 ```
 ## Creating an object
-To create an object, call `prefab.createObject(string);`. This returns an object which can be modified.
+To create an object, make a new object with `new PAObject(name, Prefab)` and add it to the prefab with `Prefab.addObject(PAObject)`.
 ```js
 const { Prefab, PrefabType } = require("pa-prefab");
+const { PAObject } = require("pa-common");
 
-let myPrefab = CreatePrefab("Hello Prefab Toolkit!", PrefabType.Misc1);
-let myObject = myPrefab.createObject("Hello Prefab Object!");
+let myPrefab = new Prefab("Hello Prefab Toolkit!", PrefabType.Misc1);
+let myObject = new PAObject("Hello Object!", myPrefab);
+myPrefab.addObject(myObject);
 ```
 ## Modifying the object
 Setting the object's name
@@ -61,21 +85,21 @@ myObject.renderDepth = 5; // This should be an integer!
 ```
 Changing object type
 ```js
-const { PrefabObjectType } = require("pa-prefab");
+const { ObjectType } = require("pa-common");
 
-myObject.objectType = PrefabObjectType.Helper;
+myObject.objectType = ObjectType.Helper;
 ```
 Changing object shape
 ```js
-const { PrefabObjectShape } = require("pa-prefab");
+const { Shape } = require("pa-common");
 
-myObject.shape = PrefabObjectShape.Circle;
+myObject.shape = Shape.Circle;
 ```
 Changing object sub-shape
 ```js
-const { PrefabCircleOption } = require("pa-prefab");
+const { CircleOption } = require("pa-common");
 
-myObject.shapeOption = PrefabCircleOption.HalfHollow;
+myObject.shapeOption = CircleOption.HalfHollow;
 ```
 Changing object text
 ```js
@@ -83,9 +107,9 @@ myObject.text = "The quick brown fox jumps over the lazy dog."; // Note: This wi
 ```
 Changing object auto kill type
 ```js
-const { PrefabObjectAutoKillType } = require("pa-prefab");
+const { AutoKillType } = require("pa-common");
 
-myObject.autoKillType = PrefabObjectAutoKillType.Fixed;
+myObject.autoKillType = AutoKillType.Fixed;
 ```
 Changing object auto kill offset
 ```js
@@ -106,10 +130,10 @@ myObject.editorLayer = 0;
 ## Animating the object
 There are four lists of different keyframe types inside the object. Each list is empty initially. You can add keyframes to those list to animate them. Note that there should be at least one keyframe per list.
 ```js
-myObject.positionKeyframes.push(CreatePositionKeyframe(0.0, 0.0, 0.0));
-myObject.scaleKeyframes.push(CreateScaleKeyframe(0.0, 1.0, 1.0));
-myObject.rotationKeyframes.push(CreateRotationKeyframe(0.0, 0.0));
-myObject.colorKeyframes.push(CreateColorKeyframe(0.0, 0));
+myObject.pushPosition(0.0, 0.0, 0.0);
+myObject.pushScale(0.0, 1.0, 1.0);
+myObject.pushRotation(0.0, 0.0);
+myObject.pushColor(0.0, 0);
 ```
 ## Building the prefab
 You can convert the prefab to a JSON string to write it to a file.
@@ -122,11 +146,11 @@ fs.writeFileSync("my_new_prefab.lsp", prefab.toString());
 You can read an existing prefab from a string.
 ```js
 const { fs } = require("fs");
-const { CreatePrefabFromJson } = require("pa-prefab");
+const { Prefab, PrefabType } = require("pa-prefab");
 
-let jsonStr = fs.readFileSync("my_prefab.lsp");
 let json = JSON.parse(jsonStr);
-let prefab = CreatePrefabFromJson(json);
+let prefab = new Prefab("", PrefabType.Bombs); // will be overriden by fromJson!
+prefab.fromJson(json);
 ```
 
 ## Run tests
