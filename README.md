@@ -10,6 +10,8 @@
 
 GitHub repository: https://github.com/PA-Toolkit/pa-prefab
 
+## IMPORTANT: This library depends on [pa-common](https://github.com/PA-Toolkit/pa-common)!
+
 ## Install
 
 ```sh
