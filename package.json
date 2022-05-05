@@ -1,6 +1,6 @@
 {
   "name": "pa-prefab",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Reads and generates Project Arrhythmia prefabs procedurally",
   "main": "build/index.js",
   "scripts": {
