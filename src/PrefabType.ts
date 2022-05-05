@@ -13,5 +13,3 @@ export enum PrefabType {
     Misc3 = 8,
     Misc4 = 9
 }
-
-export default PrefabType;
