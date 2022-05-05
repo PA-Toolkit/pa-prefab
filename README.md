@@ -46,7 +46,6 @@ import { Prefab, PrefabType } from "pa-prefab";
 ```
 
 ## Creating a prefab
-It is recommended to use the `CreatePrefab(string, PrefabType)` function to create a new prefab.
 ```js
 const { Prefab, PrefabType } = require("pa-prefab");
 
